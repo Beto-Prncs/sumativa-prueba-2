@@ -1,0 +1,57 @@
+<div class="reports-container">
+    <div class="reports-header">
+      <h2>Reportes</h2>
+      <button class="add-report-button btn" (click)="addNewReport()"> Agregar reporte</button>
+    </div>
+  
+    @if (reports.length === 0) {
+      <div class="no-reports">
+        No hay reportes disponibles. Crea uno nuevo para comenzar.
+      </div>
+    } @else {
+      <div class="reports-list">
+        @for (report of reports; track report.id) {
+          <div class="report-container">
+            <div class="report-header">
+              <h3 class="report-title">{{ report.title }}</h3>
+              <div class="report-actions">
+                <button class="delete-report-button btn" (click)="deleteReport(report.id)">🗑️</button>
+              </div>
+            </div>
+            
+            <div class="report-date">{{ report.date | date:'medium' }}</div>
+            <div class="report-description">{{ report.description }}</div>
+            
+            <div class="report-content">
+              @if (report.imageUrl) {
+                <div class="report-image-container">
+                  <img [src]="report.imageUrl" alt="Imagen del reporte" class="report-image">
+                </div>
+              }
+              
+              <div class="report-actions">
+                <button class="take-photo-button btn" (click)="openCamera(report.id)">
+                  {{ report.imageUrl ? '📷 Cambiar foto' : '📷 Añadir foto' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  
+    @if (showCamera) {
+      <div class="camera-overlay">
+        <div class="camera-modal">
+          <div class="camera-modal-header">
+            <h3>Tomar foto para reporte</h3>
+            <button class="close-camera-button btn" (click)="closeCamera()">×</button>
+          </div>
+          <app-camera [reportMode]="true" (imageSelected)="onImageSelected($event)"></app-camera>
+          <div class="camera-modal-footer">
+            <button class="close-camera-button btn" (click)="closeCamera()">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
